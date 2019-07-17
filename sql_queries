@@ -9,19 +9,32 @@ time_table_drop = "drop table time"
 # CREATE TABLES
 
 # Dimenion User table creation
-user_table_create = ("""create table if not exists users (userId int CONSTRAINT user_pk primary key,firstName text,lastName text,gender text,level text)""")
+user_table_create = ("""create table if not exists users
+                        (userId int CONSTRAINT user_pk primary key,firstName text,lastName text,gender text,level text)
+                     """)
 
 # Dimenion Song table creation
-song_table_create = ("""create table if not exists songs (song_id text CONSTRAINT song_pk primary key,title text,artist_id text,year int, duration float)""")
+song_table_create = ("""create table if not exists songs
+                        (song_id text CONSTRAINT song_pk primary key,title text,artist_id text,year int, duration float)
+                     """)
 
 # Dimenion Artist table creation
-artist_table_create = ("""create table if not exists artists (artist_id text CONSTRAINT artist_pk primary key,name varchar,location varchar,lattitude float, longitude float)""")
+artist_table_create = ("""create table if not exists artists
+                          (artist_id text CONSTRAINT artist_pk primary key,name varchar,location varchar,lattitude float, 
+                          longitude float)
+                      """)
 
 # Dimenion Time table creation
-time_table_create = ("""create table if not exists time (ts timestamp CONSTRAINT time_pk primary key,hour int,day int,week int,month int,year int,weekday int)""")
+time_table_create = ("""create table if not exists time
+                        (ts timestamp CONSTRAINT time_pk primary key,hour int,day int,week int,month int,year int,weekday int)
+                     """)
 
 # Fact Songplay table creation
-songplay_table_create = ("""create table if not exists songplays (start_time timestamp references time(ts),user_id int references users(userId) ,level text,song_id text references songs(song_id),artist_id text references artists(artist_id),session_id int, location text , user_agent text)""")
+songplay_table_create = ("""create table if not exists songplays
+                            (start_time timestamp references time(ts),user_id int references users(userId) ,level text,
+                             song_id text references songs(song_id),artist_id text references artists(artist_id),session_id int,
+                             location text , user_agent text)
+                         """)
 
 # INSERT RECORDS
 
