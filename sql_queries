@@ -1,0 +1,52 @@
+# DROP TABLES
+
+songplay_table_drop = "drop table songplays"
+user_table_drop = "drop table users"
+song_table_drop = "drop table songs"
+artist_table_drop = "drop table artists"
+time_table_drop = "drop table time"
+
+# CREATE TABLES
+
+# Dimenion User table creation
+user_table_create = ("""create table if not exists users (userId int CONSTRAINT user_pk primary key,firstName text,lastName text,gender text,level text)""")
+
+# Dimenion Song table creation
+song_table_create = ("""create table if not exists songs (song_id text CONSTRAINT song_pk primary key,title text,artist_id text,year int, duration float)""")
+
+# Dimenion Artist table creation
+artist_table_create = ("""create table if not exists artists (artist_id text CONSTRAINT artist_pk primary key,name varchar,location varchar,lattitude float, longitude float)""")
+
+# Dimenion Time table creation
+time_table_create = ("""create table if not exists time (ts timestamp CONSTRAINT time_pk primary key,hour int,day int,week int,month int,year int,weekday int)""")
+
+# Fact Songplay table creation
+songplay_table_create = ("""create table if not exists songplays (start_time timestamp references time(ts),user_id int references users(userId) ,level text,song_id text references songs(song_id),artist_id text references artists(artist_id),session_id int, location text , user_agent text)""")
+
+# INSERT RECORDS
+
+# Insert songs data, Duplicate song_ids are ignored 
+song_table_insert = ("""INSERT INTO songs (song_id , title ,artist_id ,year , duration ) VALUES (%s, %s, %s, %s, %s)  ON CONFLICT ON CONSTRAINT song_pk DO NOTHING """ )
+
+# Insert artist data, Duplicate artist_ids are ignored 
+artist_table_insert = (""" INSERT INTO  artists (artist_id ,name ,location ,lattitude , longitude) VALUES (%s, %s, %s, %s, %s) ON CONFLICT ON CONSTRAINT artist_pk DO NOTHING""" )
+
+# Insert time data, Duplicate timestamp are ignored 
+time_table_insert = (""" INSERT INTO time (ts,hour,day,week,month,year,weekday) VALUES (%s,%s,%s,%s,%s,%s,%s) ON CONFLICT ON CONSTRAINT time_pk DO NOTHING """)
+
+# Insert Users data, Duplicate User_ids are ignored 
+user_table_insert = (""" INSERT INTO users (userId ,firstName,lastName,gender,level) VALUES (%s, %s, %s, %s, %s) ON CONFLICT ON CONSTRAINT user_pk DO NOTHING""")
+
+# Insert songplay data, Duplicate song_ids are ignored 
+songplay_table_insert = (""" INSERT INTO  songplays (start_time ,user_id ,level ,song_id ,artist_id ,session_id , location  , user_agent) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) 
+""")
+
+# QUERY LISTS
+
+create_table_queries = [user_table_create, song_table_create, artist_table_create, time_table_create,songplay_table_create]
+drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
+
+
+# FIND SONGS
+#implement the song_select query in sql_queries.py to find the song ID and artist ID based on the title, artist name, #and duration of a song.
+song_select = (""" select songs.song_id , artists.artist_id from songs join artists on songs.artist_id = artists.artist_id where songs.title= %s and artists.name= %s and  songs.duration= %s  """)
